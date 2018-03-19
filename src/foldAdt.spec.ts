@@ -53,18 +53,12 @@ describe('fold for traditional adts with string discriminator', () => {
   const a: ADT = { type: 'a', x: '1234' }
   const b: ADT = { type: 'b', y: 1234 }
   it('should handle all cases', () => {
-    expect(
-      fold<ADT>(a)({
-        a: ({ x }) => x.length,
-        b: ({ y }) => y,
-      }),
-    ).toEqual(4)
-    expect(
-      fold<ADT>(b)({
-        a: ({ x }) => x.length,
-        b: ({ y }) => y,
-      }),
-    ).toEqual(1234)
+    const f: Fold<ADT, number> = {
+      a: ({ x }) => x.length,
+      b: ({ y }) => y,
+    }
+    expect(fold<ADT>(a)(f)).toEqual(4)
+    expect(fold<ADT>(b)(f)).toEqual(1234)
   })
 })
 
