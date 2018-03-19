@@ -35,7 +35,7 @@ export const Constructor: <T extends { type: string }>() => Constructor<T> = <
 /**
  * Apply a fold to an adt
  */
-export const fold: <A extends { type: string }>(value: A) => <R>(f: Fold<A, R>) => R = value => f =>
+export const fold: <A extends { type: string }, R>(f: Fold<A, R>) => (value: A) => R = f => value =>
   (f as any)[value.type](value)
 
 type ADT =
@@ -57,8 +57,8 @@ describe('fold for traditional adts with string discriminator', () => {
       a: ({ x }) => x.length,
       b: ({ y }) => y,
     }
-    expect(fold<ADT>(a)(f)).toEqual(4)
-    expect(fold<ADT>(b)(f)).toEqual(1234)
+    expect(fold(f)(a)).toEqual(4)
+    expect(fold(f)(b)).toEqual(1234)
   })
 })
 
