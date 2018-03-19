@@ -48,6 +48,9 @@ console.log(area(b)) // 200
 Performs an operation on an ADT. Not all cases need to be handled. Unhandled cases are handled with a default method.
 
 ```typescript
-const isCircle = Fold.partialFold<Shape, boolean>({ circle: () => true }, () => false)
+const isCircle = Fold.partialFold<Shape, boolean>(
+  { circle: () => true },
+  () => false
+)
 isCircle(a) // true
 ```
