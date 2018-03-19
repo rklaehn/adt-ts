@@ -11,21 +11,42 @@ type ADT =
 // type AdtToProtocol<T> = { [P in keyof T]: Select<T, P> }
 
 // typescript 2.8. Select case from ADT
+/**
+ * Remove a case from a type
+ */
 export type Diff<T, U> = T extends U ? never : T
+/**
+ * Remove the 'type' field from a type
+ */
 export type RemoveType<T extends { type: string }> = { [K in Diff<keyof T, 'type'>]: T[K] }
+/**
+ * Select a case from an ADT based on the type of the 'type' field
+ */
 export type Select<ADT, TypeType> = ADT extends { type: TypeType } ? ADT : never
+/**
+ * Methods to handle each case of an ADT
+ */
 export type Fold<T extends { type: string }, R> = { [P in T['type']]: (x: Select<T, P>) => R }
-export const fold: <A extends { type: string }>(value: A) => <R>(f: Fold<A, R>) => R = value => f =>
-  (f as any)[value.type](value)
+/**
+ * Type for a "constructor" that has a method for each adt case
+ */
 export type Constructor<T extends { type: string }> = {
   [P in T['type']]: (x: RemoveType<Select<T, P>>) => T
 }
+/**
+ * Create a constructor for a given type
+ */
 export const Constructor: <T extends { type: string }>() => Constructor<T> = <
   T extends { type: string }
 >() =>
   new Proxy<Constructor<T>>({} as any, {
     get: (_target, type) => (args: any) => ({ ...args, type }),
   })
+/**
+ * Apply a fold to an adt
+ */
+export const fold: <A extends { type: string }>(value: A) => <R>(f: Fold<A, R>) => R = value => f =>
+  (f as any)[value.type](value)
 
 // type Proto = AdtToProtocol<ADT2>
 describe('fold for traditional adts with string discriminator', () => {
