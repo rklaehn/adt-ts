@@ -24,7 +24,7 @@ type Shape =
 
 Provides a type transformation that adds the type fields and adds readonly everywhere. This is equivalent to the above ADT encoding:
 
-```
+```typescript
 type Shape = FromCases<{
   circle: { r: number }
   rectangle: { w: number, h: number }
