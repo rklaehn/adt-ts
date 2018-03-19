@@ -1,5 +1,5 @@
 # adt-ts
-Type-safe algebraic data types and pattern matching in typescript 2.8
+Type-safe algebraic data types and limited pattern matching in typescript 2.8
 
 # What
 
