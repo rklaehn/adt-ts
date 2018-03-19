@@ -1,13 +1,3 @@
-type ADT =
-  | {
-      type: 'a'
-      x: string
-    }
-  | {
-      type: 'b'
-      y: number
-    }
-
 // type AdtToProtocol<T> = { [P in keyof T]: Select<T, P> }
 
 // typescript 2.8. Select case from ADT
@@ -22,7 +12,7 @@ export type RemoveType<T extends { type: string }> = { [K in Diff<keyof T, 'type
 /**
  * Select a case from an ADT based on the type of the 'type' field
  */
-export type Select<ADT, TypeType> = ADT extends { type: TypeType } ? ADT : never
+export type Select<T, TypeType> = T extends { type: TypeType } ? T : never
 /**
  * Methods to handle each case of an ADT
  */
@@ -47,6 +37,16 @@ export const Constructor: <T extends { type: string }>() => Constructor<T> = <
  */
 export const fold: <A extends { type: string }>(value: A) => <R>(f: Fold<A, R>) => R = value => f =>
   (f as any)[value.type](value)
+
+type ADT =
+  | {
+      type: 'a'
+      x: string
+    }
+  | {
+      type: 'b'
+      y: number
+    }
 
 // type Proto = AdtToProtocol<ADT2>
 describe('fold for traditional adts with string discriminator', () => {
