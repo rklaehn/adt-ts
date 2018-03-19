@@ -30,6 +30,13 @@ type Shape = FromCases<{
   rectangle: { w: number, h: number }
 }>
 ```
+produces
+```typescript
+type Shape =
+  | { readonly type: 'circle', readonly r: number }
+  | { readonly type: 'rectangle', readonly w: number, readonly h: number }
+```
+
 
 # Constructor
 
