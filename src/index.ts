@@ -50,47 +50,9 @@ const wrongType = () => {
 export const fold: <A extends Tagged, R>(f: Fold<A, R>) => (value: A) => R = f =>
   partialFold(f, wrongType)
 
-type Shape =
-  | {
-      readonly type: 'circle'
-      readonly r: number
-    }
-  | {
-      readonly type: 'rectangle'
-      readonly w: number
-      readonly h: number
-    }
-const Shape = Constructor<Shape>()
-
-describe('fold for traditional adts with string discriminator', () => {
-  const a: Shape = { type: 'circle', r: 10 }
-  const b: Shape = { type: 'rectangle', w: 10, h: 20 }
-  it('should handle all cases', () => {
-    const area: Fold<Shape, number> = {
-      circle: ({ r }) => r * r * Math.PI,
-      rectangle: ({ w, h }) => w * h,
-    }
-    expect(fold(area)(a)).toBeCloseTo(10 * 10 * Math.PI)
-    expect(fold(area)(b)).toEqual(10 * 20)
-  })
-})
-
-describe('Constructor for traditional adts with string discriminator', () => {
-  it('should allow creating instances', () => {
-    expect(Shape.circle({ r: 10 })).toEqual({ type: 'circle', r: 10 })
-    expect(Shape.rectangle({ w: 10, h: 20 })).toEqual({ type: 'rectangle', w: 10, h: 20 })
-  })
-})
-
-describe('partialFold for traditional adts with string discriminator', () => {
-  const a: Shape = { type: 'circle', r: 10 }
-  const b: Shape = { type: 'rectangle', w: 10, h: 20 }
-  it('should handle all cases', () => {
-    const isCircle: Partial<Fold<Shape, boolean>> = {
-      circle: () => true,
-    }
-    const pf = partialFold(isCircle, () => false)
-    expect(pf(a)).toBeTruthy()
-    expect(pf(b)).toBeFalsy()
-  })
-})
+export const Fold = {
+  fold,
+  partialFold,
+}
+export type WithTag<T> = { [TKey in keyof T]: { readonly type: TKey } & Readonly<T[TKey]> }
+export type FromCases<P> = WithTag<P>[keyof P]
