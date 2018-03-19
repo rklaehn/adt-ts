@@ -63,7 +63,7 @@ console.log(area(b)) // 200
 
 # Partial fold
 
-Performs an operation on an ADT. Not all cases need to be handled. Unhandled cases are handled with a default method.
+Performs an operation on an ADT. Not all cases need to be handled. Handling a case that is not in the ADT (e.g. due to a typo) will lead to a compile error. Unhandled cases are handled with a default method.
 
 ```typescript
 const isCircle = Fold.partialFold<Shape, boolean>(
