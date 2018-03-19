@@ -20,6 +20,17 @@ type Shape =
   | { type: 'rectangle', w: number, h: number }
 ```
 
+# Shortcut notation
+
+Provides a type transformation that adds the type fields and adds readonly everywhere. This is equivalent to the above ADT encoding:
+
+```
+type Shape = FromCases<{
+  circle: { r: number }
+  rectangle: { w: number, h: number }
+}>
+```
+
 # Constructor
 
 Constructor functions are useful for helping type inference. They return the ADT type and thus help typescript infer correct
