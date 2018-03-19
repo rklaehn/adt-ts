@@ -50,46 +50,47 @@ const wrongType = () => {
 export const fold: <A extends Tagged, R>(f: Fold<A, R>) => (value: A) => R = f =>
   partialFold(f, wrongType)
 
-type ADT =
+type Shape =
   | {
-      readonly type: 'a'
-      readonly x: string
+      readonly type: 'circle'
+      readonly r: number
     }
   | {
-      readonly type: 'b'
-      readonly y: number
+      readonly type: 'rectangle'
+      readonly w: number
+      readonly h: number
     }
-const ADT = Constructor<ADT>()
+const Shape = Constructor<Shape>()
 
-// type Proto = AdtToProtocol<ADT2>
 describe('fold for traditional adts with string discriminator', () => {
-  const a: ADT = { type: 'a', x: '1234' }
-  const b: ADT = { type: 'b', y: 1234 }
+  const a: Shape = { type: 'circle', r: 10 }
+  const b: Shape = { type: 'rectangle', w: 10, h: 20 }
   it('should handle all cases', () => {
-    const f: Fold<ADT, number> = {
-      a: ({ x }) => x.length,
-      b: ({ y }) => y,
+    const area: Fold<Shape, number> = {
+      circle: ({ r }) => r * r * Math.PI,
+      rectangle: ({ w, h }) => w * h,
     }
-    expect(fold(f)(a)).toEqual(4)
-    expect(fold(f)(b)).toEqual(1234)
+    expect(fold(area)(a)).toBeCloseTo(10 * 10 * Math.PI)
+    expect(fold(area)(b)).toEqual(10 * 20)
   })
 })
 
 describe('Constructor for traditional adts with string discriminator', () => {
   it('should allow creating instances', () => {
-    expect(ADT.a({ x: '1234' })).toEqual({ type: 'a', x: '1234' })
-    expect(ADT.b({ y: 1234 })).toEqual({ type: 'b', y: 1234 })
+    expect(Shape.circle({ r: 10 })).toEqual({ type: 'circle', r: 10 })
+    expect(Shape.rectangle({ w: 10, h: 20 })).toEqual({ type: 'rectangle', w: 10, h: 20 })
   })
 })
 
 describe('partialFold for traditional adts with string discriminator', () => {
-  const a: ADT = { type: 'a', x: '1234' }
-  const b: ADT = { type: 'b', y: 1234 }
+  const a: Shape = { type: 'circle', r: 10 }
+  const b: Shape = { type: 'rectangle', w: 10, h: 20 }
   it('should handle all cases', () => {
-    const f: Partial<Fold<ADT, number>> = {
-      a: ({ x }) => x.length,
+    const isCircle: Partial<Fold<Shape, boolean>> = {
+      circle: () => true,
     }
-    expect(partialFold(f, () => -1)(a)).toEqual(4)
-    expect(partialFold(f, () => -1)(b)).toEqual(-1)
+    const pf = partialFold(isCircle, () => false)
+    expect(pf(a)).toBeTruthy()
+    expect(pf(b)).toBeFalsy()
   })
 })
