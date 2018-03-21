@@ -9,6 +9,10 @@ provides a generator for constructor methods for both convenience and helping ty
 
 It uses some advanced features of typescript 2.8, but the ADT type itself remains extremely simple.
 
+# Installation
+
+Use the node package manager of your choice, e.g. `yarn install rklaehn/adt-ts#<tag>` where `tag` can either be a specific release or `master`.
+
 # ADT encoding
 
 The ADT encoding chosen for this library is to use a `type` field as a discriminator. The advantage of this encoding compared
