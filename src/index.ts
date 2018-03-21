@@ -1,12 +1,8 @@
 export type Tagged = { type: string }
 /**
- * Remove a case from a type
- */
-export type Diff<T, U> = T extends U ? never : T
-/**
  * Remove the 'type' field from a type
  */
-export type RemoveTag<T extends Tagged> = { [K in Diff<keyof T, 'type'>]: T[K] }
+export type RemoveTag<T extends Tagged> = { [K in Exclude<keyof T, 'type'>]: T[K] }
 /**
  * Select a case from an ADT based on the type of the 'type' field
  */
